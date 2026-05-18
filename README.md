@@ -130,10 +130,43 @@ SpaceFighter/
 
 ### 构建与运行
 
-#### 依赖
+#### 依赖环境
 
-- 支持 C++17 的编译器，例如 MSVC 2019+、GCC 8+、Clang 7+
-- SDL2、SDL2_image、SDL2_mixer、SDL2_ttf
+本项目的依赖项主要来自 `CMakeLists.txt` 中的 CMake 配置。构建前需要准备以下环境：
+
+| 类型 | 要求 |
+|------|------|
+| 操作系统 | Windows 优先；项目当前生成目标名会包含系统名，例如 `SpaceFighter-Windows` |
+| 构建工具 | CMake 3.10.0+ |
+| C++ 标准 | C++17 |
+| 编译器 | 支持 C++17 的编译器，例如 MSVC、GCC 或 Clang |
+| 图形与输入库 | SDL2 |
+| 图片加载库 | SDL2_image |
+| 音频库 | SDL2_mixer |
+| 字体渲染库 | SDL2_ttf |
+
+根据 `CMakeLists.txt`，项目构建时会查找以下 SDL 相关库：
+
+```cmake
+find_package(SDL2 REQUIRED)
+find_package(SDL2_image REQUIRED)
+find_package(SDL2_mixer REQUIRED)
+find_package(SDL2_ttf REQUIRED)
+```
+
+并在链接阶段使用：
+
+```cmake
+SDL2::SDL2
+SDL2::SDL2main
+SDL2_image::SDL2_image
+SDL2_mixer::SDL2_mixer
+SDL2_ttf::SDL2_ttf
+```
+
+因此，克隆项目后，仅有源码和 `assets` 资源还不够，本机还需要安装并配置好上述 SDL2 相关开发库，使 CMake 能够找到它们。
+
+> SDL2 及其扩展库的具体安装和配置方法后续补充。
 
 #### 编译
 
@@ -305,10 +338,43 @@ SpaceFighter/
 
 ### Build And Run
 
-#### Prerequisites
+#### Dependencies
 
-- A C++17 compiler, such as MSVC 2019+, GCC 8+, or Clang 7+
-- SDL2, SDL2_image, SDL2_mixer, and SDL2_ttf
+The project dependencies are mainly defined in `CMakeLists.txt`. Before building the project, prepare the following environment:
+
+| Type | Requirement |
+|------|-------------|
+| Operating System | Windows-first; the generated target name includes the system name, for example `SpaceFighter-Windows` |
+| Build Tool | CMake 3.10.0+ |
+| C++ Standard | C++17 |
+| Compiler | A compiler that supports C++17, such as MSVC, GCC, or Clang |
+| Windowing And Input | SDL2 |
+| Image Loading | SDL2_image |
+| Audio | SDL2_mixer |
+| Font Rendering | SDL2_ttf |
+
+According to `CMakeLists.txt`, the project requires the following SDL-related packages during CMake configuration:
+
+```cmake
+find_package(SDL2 REQUIRED)
+find_package(SDL2_image REQUIRED)
+find_package(SDL2_mixer REQUIRED)
+find_package(SDL2_ttf REQUIRED)
+```
+
+And links the following targets:
+
+```cmake
+SDL2::SDL2
+SDL2::SDL2main
+SDL2_image::SDL2_image
+SDL2_mixer::SDL2_mixer
+SDL2_ttf::SDL2_ttf
+```
+
+Therefore, after cloning the project, having only the source code and `assets` resources is not enough. The required SDL2 development libraries must also be installed and discoverable by CMake.
+
+> Detailed SDL2 installation and configuration steps will be added later.
 
 #### Compile
 

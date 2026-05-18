@@ -1,10 +1,10 @@
-/**
+﻿/**
  *  @file    EnemySystem.cpp
  *  @brief   敌机系统实现
 **/
 
 #include "EnemySystem.h"
-#include "Object.h"
+#include "Object.h"f:\Googl
 #include "Config.h"
 #include <SDL_image.h>
 #include <cmath>
