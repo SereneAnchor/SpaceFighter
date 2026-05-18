@@ -8,9 +8,12 @@ project(SpaceFighter VERSION 0.1.0 LANGUAGES C CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-#设置编译选项(对于代码中未使用的变量或者函数发出警告)
-add_compile_options(/W4)
-add_compile_options(/utf-8)
+#MSVC使用高警告等级和UTF-8源码编码,GCC/Clang使用通用警告参数
+if(MSVC)
+    add_compile_options(/W4 /utf-8)
+else()
+    add_compile_options(-Wall -Wextra)
+endif()
 
 #设置编译输出目录(原先在build/Debug目录下,现在设为在项目根路径下:CMAKE_SOURCE_DIR表示顶层CMake路径)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_SOURCE_DIR})

@@ -111,10 +111,10 @@ void MenuScene::handleEvent(SDL_Event *event)
         {
             if(selectedMenuIndex==0||key==SDL_SCANCODE_SPACE)
             {
-                //把当前菜单难度映射到全局难度偏移后切换到主游戏场景
-                if(difficultyIndex==0)      gDifficultyOffset=-0.30f;
-                else if(difficultyIndex==1) gDifficultyOffset=0.0f;
-                else                        gDifficultyOffset=0.40f;
+                //把当前菜单难度保存到Game后切换到主游戏场景
+                if(difficultyIndex==0)      game.setDifficultyOffset(-0.30f);
+                else if(difficultyIndex==1) game.setDifficultyOffset(0.0f);
+                else                        game.setDifficultyOffset(0.40f);
                 game.requestSceneChange(new MainScene());
             }
         }

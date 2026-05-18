@@ -155,11 +155,4 @@ inline constexpr float DDA_DAMAGE_CAP=0.35f;
 inline constexpr float DDA_DAMAGE_WINDOW=4.0f;
 inline constexpr int DDA_ACCURACY_MIN_SHOTS=20;
 
-/**
- *  @brief  菜单难度偏移
- *
- *  @param  gDifficultyOffset  菜单选择的难度偏移值,EASY=-0.3,NORMAL=0,HARD=+0.4。
-**/
-inline float gDifficultyOffset=0.0f;
-
 #endif

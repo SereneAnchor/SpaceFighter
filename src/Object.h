@@ -1,6 +1,7 @@
 #ifndef OBJECT
 #define OBJECT
 
+#include <algorithm>
 #include <SDL.h>
 #include <vector>
 
@@ -204,16 +205,16 @@ struct PowerUp
 /**
  *  @brief  粒子结构体
  *
- *  @param  position     粒子当前位置。
- *  @param  velocity     粒子当前速度向量。
- *  @param  lifetime     粒子剩余生命周期。
- *  @param  maxLifetime  粒子最大生命周期。
- *  @param  r            粒子红色通道。
- *  @param  g            粒子绿色通道。
- *  @param  b            粒子蓝色通道。
- *  @param  a            粒子透明度通道。
- *  @param  size         粒子渲染尺寸。
- *  @param  isAlive      粒子是否存活。
+ *  @param  position     粒子当前位置
+ *  @param  velocity     粒子当前速度向量
+ *  @param  lifetime     粒子剩余生命周期
+ *  @param  maxLifetime  粒子最大生命周期
+ *  @param  r            粒子红色通道
+ *  @param  g            粒子绿色通道
+ *  @param  b            粒子蓝色通道
+ *  @param  a            粒子透明度通道
+ *  @param  size         粒子渲染尺寸
+ *  @param  isAlive      粒子是否存活
 **/
 struct Particle
 {
@@ -233,13 +234,13 @@ template<typename T>
 class ObjectPool
 {
     public:
-        //析构对象池并释放全部已创建对象。
+        //析构对象池并释放全部已创建对象
         ~ObjectPool()
         {
             clear();
         }
 
-        //获取一个可用对象,优先复用空闲对象,没有空闲对象时创建新对象。
+        //获取一个可用对象,优先复用空闲对象,没有空闲对象时创建新对象
         T* acquire()
         {
             if(available.empty())
@@ -253,16 +254,22 @@ class ObjectPool
             return obj;
         }
 
-        //将对象归还到对象池的空闲列表。
+        //将对象归还到对象池的空闲列表
         void release(T* obj)
         {
-            if(obj!=nullptr)
+            if(obj==nullptr)
             {
-                available.push_back(obj);
+                return;
             }
+            //防止同一对象被重复归还,重复指针进入空闲列表后,后续可能被多次acquire,导致多个逻辑对象共享同一块内存
+            if(std::find(available.begin(),available.end(),obj)!=available.end())
+            {
+                return;
+            }
+            available.push_back(obj);
         }
 
-        //清空对象池,释放全部已创建对象并清空记录。
+        //清空对象池,释放全部已创建对象并清空记录
         void clear()
         {
             for(auto obj:all)
@@ -274,10 +281,10 @@ class ObjectPool
         }
 
     private:
-        //对象池创建过的全部对象。
+        //对象池创建过的全部对象
         std::vector<T*> all;
 
-        //当前可复用的空闲对象。
+        //当前可复用的空闲对象
         std::vector<T*> available;
 };
 

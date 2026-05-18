@@ -46,8 +46,8 @@ void Game::initialGame()
         isRunning=false;
         return;
     }
-    //基于主窗口创建硬件加速渲染器,供所有场景绘制使用
-    renderer=SDL_CreateRenderer(window,-1,SDL_RENDERER_ACCELERATED);
+    //基于主窗口创建硬件加速并启用垂直同步的渲染器,供所有场景绘制使用
+    renderer=SDL_CreateRenderer(window,-1,SDL_RENDERER_ACCELERATED|SDL_RENDERER_PRESENTVSYNC);
     //主渲染器创建失败时停止主循环,避免场景加载纹理时访问空渲染器
     if(renderer==nullptr)
     {
@@ -137,6 +137,11 @@ void Game::requestSceneChange(Scene *scene)
 
 void Game::changeScene(Scene *scene)
 {
+    //避免空场景切换导致后续生命周期调用崩溃
+    if(scene==nullptr)
+    {
+        return;
+    }
     //切换前先调用当前场景的清理逻辑并释放场景对象
     if(currentScene!=nullptr)
     {
@@ -222,12 +227,20 @@ void Game::Handle(SDL_Event *event)
             SDL_StopTextInput();
         }
         //把SDL事件交给当前场景处理菜单选择、移动、射击等输入
-        currentScene->handleEvent(event);
+        if(currentScene!=nullptr)
+        {
+            currentScene->handleEvent(event);
+        }
     }
 }
 
 void Game::Update(float dt)
 {
+    //当前场景为空时跳过更新,避免初始化失败或清理后的空指针访问
+    if(currentScene==nullptr)
+    {
+        return;
+    }
     //把本帧时间间隔传给当前场景,驱动场景内部逻辑更新
     currentScene->updateScene(dt);
 }
@@ -236,6 +249,12 @@ void Game::Render()
 {
     //清空Game主渲染器中的上一帧画面
     SDL_RenderClear(renderer);
+    //当前场景为空时只提交清屏结果,避免渲染阶段访问空指针
+    if(currentScene==nullptr)
+    {
+        SDL_RenderPresent(renderer);
+        return;
+    }
     //调用当前场景把背景、角色、UI等内容绘制到主渲染器
     currentScene->renderScene();
     //把主渲染器中的绘制结果提交到SDL主窗口
@@ -264,4 +283,16 @@ int Game::getWindowHeight()
 {
     //返回Game创建主窗口时使用的高度
     return windowHeight;
+}
+
+void Game::setDifficultyOffset(float offset)
+{
+    //保存菜单选择的难度偏移,供后续主游戏场景读取
+    difficultyOffset=offset;
+}
+
+float Game::getDifficultyOffset() const
+{
+    //返回当前难度偏移,避免场景之间依赖全局可变状态
+    return difficultyOffset;
 }

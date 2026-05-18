@@ -61,6 +61,12 @@ class Game
         //返回Game配置的主窗口高度
         int getWindowHeight();
 
+        //设置菜单选择的难度偏移
+        void setDifficultyOffset(float offset);
+
+        //返回当前菜单选择的难度偏移
+        float getDifficultyOffset() const;
+
     private:
         //私有构造函数,限制外部创建实例
         Game();
@@ -91,6 +97,9 @@ class Game
 
         //创建SDL主窗口时使用的高度
         int windowHeight=750;
+
+        //菜单选择的难度偏移,EASY=-0.3,NORMAL=0,HARD=+0.4
+        float difficultyOffset=0.0f;
 
         //主循环进行帧率限制时使用的目标帧率
         int FPS=60;

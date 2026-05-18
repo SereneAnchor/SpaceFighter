@@ -122,7 +122,7 @@ void MainScene::updateScene(float deltaTime)
         return;
     }
     //根据分数计算基础动态难度
-    float scoreFactor=1.0f+gDifficultyOffset+player.score/800.0f*DIFFICULTY_RAMP;
+    float scoreFactor=1.0f+game.getDifficultyOffset()+player.score/800.0f*DIFFICULTY_RAMP;
     //根据玩家命中率修正难度,命中样本不足时按默认命中率处理
     float accuracy=0.5f;
     if(playerShotsFired>=DDA_ACCURACY_MIN_SHOTS)
